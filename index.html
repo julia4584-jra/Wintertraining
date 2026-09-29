@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+                <style>.lw { font-size: 60px; font-family: Arial, Helvetica, sans-serif; }</style>
+            </head>
+            <body>
+                <script>(function installLiveweaveConsoleBridge() {
+        if (window.__liveweaveConsoleBridge) return;
+        window.__liveweaveConsoleBridge = true;
+
+        function format(value) {
+            if (typeof value === 'string') return value;
+            if (typeof value === 'undefined') return 'undefined';
+            if (typeof value === 'function') return value.toString();
+            if (value instanceof Error) return value.name + ': ' + value.message;
+            if (value instanceof Element) return value.outerHTML;
+            try {
+                var seen = [];
+                return JSON.stringify(value, function(key, item) {
+                    if (typeof item === 'object' && item !== null) {
+                        if (seen.indexOf(item) !== -1) return '[Circular]';
+                        seen.push(item);
+                    }
+                    return item;
+                }, 2);
+            } catch (err) {
+                return String(value);
+            }
+        }
+
+        function send(type, values, id) {
+            parent.postMessage({
+                source: 'liveweave-preview-console',
+                type: type,
+                id: id || '',
+                values: (values || []).map(format)
+            }, '*');
+        }
+
+        ['log', 'info', 'warn', 'error', 'debug'].forEach(function(level) {
+            var original = console[level];
+            console[level] = function() {
+                var args = Array.prototype.slice.call(arguments);
+                send(level === 'log' || level === 'debug' ? 'log' : level, args);
+                if (original) original.apply(console, args);
+            };
+        });
+
+        window.addEventListener('error', function(event) {
+            send('error', [event.message + (event.lineno ? ' (line ' + event.lineno + ')' : '')]);
+        });
+        window.addEventListener('unhandledrejection', function(event) {
+            send('error', ['Unhandled promise rejection:', event.reason]);
+        });
+        window.addEventListener('message', function(event) {
+            var message = event.data || {};
+            if (event.source !== parent || message.source !== 'liveweave-parent-console' || message.type !== 'evaluate') return;
+            try {
+                var result = (0, eval)(message.code);
+                Promise.resolve(result).then(function(value) {
+                    send('result', [value], message.id);
+                }, function(error) {
+                    send('error', [error], message.id);
+                });
+            } catch (error) {
+                send('error', [error], message.id);
+            }
+        });
+        send('ready', []);
+    })();</script>
+                <script>(function installPreviewLinkGuard() {
+        var noticeTimer;
+
+        function showNotice(message) {
+            var notice = document.getElementById('lw-preview-link-notice');
+            if (!notice) {
+                notice = document.createElement('div');
+                notice.id = 'lw-preview-link-notice';
+                notice.setAttribute('role', 'status');
+                notice.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:2147483647;max-width:calc(100% - 24px);padding:10px 14px;border-radius:9px;background:#17212d;color:#fff;font:13px/1.4 system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25);pointer-events:none;';
+                document.body.appendChild(notice);
+            }
+            notice.textContent = message;
+            notice.hidden = false;
+            clearTimeout(noticeTimer);
+            noticeTimer = setTimeout(function() { notice.hidden = true; }, 3500);
+        }
+
+        document.addEventListener('click', function(event) {
+            var link = event.target.closest && event.target.closest('a[href]');
+            if (!link || event.defaultPrevented) return;
+
+            var href = (link.getAttribute('href') || '').trim();
+            if (href.charAt(0) === '#') {
+                event.preventDefault();
+                var fragment = href.slice(1);
+                if (!fragment) {
+                    window.scrollTo(0, 0);
+                    return;
+                }
+                try { fragment = decodeURIComponent(fragment); } catch (error) {}
+                var target = document.getElementById(fragment) || document.getElementsByName(fragment)[0];
+                if (target) target.scrollIntoView();
+                return;
+            }
+
+            if (/^(https?:)?\/\//i.test(href)) {
+                event.preventDefault();
+                window.open(href, '_blank', 'noopener,noreferrer');
+                return;
+            }
+
+            if (/^(mailto:|tel:)/i.test(href)) return;
+
+            event.preventDefault();
+            showNotice('This page cannot be opened in the preview.');
+        }, true);
+    })();</script>
+                
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Winter Training</title>
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#f4f6f7,#101416);--card:light-dark(#fff,#171c1f);--text:light-dark(#172126,#eef2f3);--muted:light-dark(#64727a,#9eabb1);--line:light-dark(#dbe1e4,#303a3f);--accent:light-dark(#087f8c,#52c6d1);--soft:light-dark(#e8f4f5,#19353a);--done:light-dark(#e7f5e9,#18351f)}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}#app{min-height:100vh;background:var(--bg);padding:24px clamp(16px,4vw,48px) 48px}h1,h2,h3{margin:0 0 10px}h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.03em}h2{font-size:24px;margin-top:8px}.sub{color:var(--muted);max-width:800px;line-height:1.5}.top{display:flex;gap:16px;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;margin-bottom:22px}.stats{display:flex;gap:10px;flex-wrap:wrap}.pill{background:var(--soft);padding:9px 12px;border-radius:999px;font-size:13px}.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:10px;margin-bottom:14px}.tab{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:10px;padding:10px 14px;cursor:pointer;white-space:nowrap}.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.04)}.day{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.day h3{font-size:18px}.tag{font-size:11px;padding:5px 8px;border-radius:999px;background:var(--soft);color:var(--accent);white-space:nowrap}.note{color:var(--muted);font-size:13px;line-height:1.45;margin:4px 0 12px}.item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}.item:first-of-type{border-top:0}.item input{width:20px;height:20px;margin-top:1px;accent-color:var(--accent);flex:0 0 auto}.item.done .txt{text-decoration:line-through;opacity:.55}.txt{line-height:1.4}.small{font-size:12px;color:var(--muted)}.section{margin-top:24px}.wide{grid-column:1/-1}.video{display:inline-block;margin-top:7px;font-size:12px;color:var(--accent);text-decoration:none}.video:hover{text-decoration:underline}.week-summary{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}.fill{height:100%;background:var(--accent);width:0}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.btn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:9px;padding:9px 12px;cursor:pointer}.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.warning{background:light-dark(#fff6e3,#3a2d12);border:1px solid light-dark(#f0d49a,#6a5424);padding:13px 15px;border-radius:12px;line-height:1.45;font-size:13px}.footer{margin-top:28px;color:var(--muted);font-size:12px;line-height:1.5}
+</style>
+
+
+<div id="app">
+  <div class="top">
+      <div><h1>8-Wochen Trainingsplan</h1><div class="sub">Abhakbarer Winterplan mit Schwerpunkt FTP-Entwicklung. FTP-Ausgangswert: <strong>190 W</strong>. Rad nur Mittwoch und Samstag.</div></div>
+          <div class="stats" title="0 von 26 Punkten erledigt"><span class="pill">🏊 Mo: Schwimmen</span><span class="pill">🚴 Mi: Rolle ≤60′</span><span class="pill">🚴 Sa: Rolle</span><span class="pill">🏃 So: langer Lauf</span></div>
+            </div>
+              <div class="hero"><div class="small">WINTER TRAINING · 8 WOCHEN</div><h2 id="todayTitle">Heute · Dienstag</h2><div class="muted" id="todayText">Früh: Beine · Abend: Lauftraining</div><div class="today-grid"><div class="progress-wrap"><div class="progress-num" id="progressNum">0%</div><div class="metric">Wochenfortschritt</div><div class="bar" style="margin-top:9px"><div class="fill" id="progressFill" style="width: 0%;"></div></div></div><div class="progress-wrap"><div class="progress-num">190 W</div><div class="metric">Aktuelle FTP</div><div class="metric" style="margin-top:7px">Rad: Mi + Sa</div></div></div></div>
+                <div class="warning">Steuerung: Die Wattwerte sind auf FTP 190 W gerechnet. Wenn eine Einheit ungewöhnlich schwer ist oder die Beine vom Dienstagstraining noch müde sind, Intensität reduzieren. Krafttraining ohne separates Aufwärmprogramm; erste Arbeitssätze trotzdem kontrolliert und nicht bis zum Muskelversagen.</div>
+                  <div class="section"><div class="tabs" id="tabs"><button class="tab active" onclick="window.current=0;render()">Woche 1</button><button class="tab " onclick="window.current=1;render()">Woche 2</button><button class="tab " onclick="window.current=2;render()">Woche 3</button><button class="tab " onclick="window.current=3;render()">Woche 4</button><button class="tab " onclick="window.current=4;render()">Woche 5</button><button class="tab " onclick="window.current=5;render()">Woche 6</button><button class="tab " onclick="window.current=6;render()">Woche 7</button><button class="tab " onclick="window.current=7;render()">Woche 8</button></div><div id="content"><div class="week-summary"><span class="pill">Woche 1</span><span class="pill">FTP 190 W</span><span class="pill">Rad: Mittwoch + Samstag</span></div><div class="grid"><div class="card"><div class="day"><h3>Montag · Schwimmen</h3><span class="tag">Abschluss</span></div><label class="item "><input type="checkbox" onchange="toggle('w1-mon-0')"><span class="txt">Schwimmtraining abgeschlossen</span></label></div><div class="card"><div class="day"><h3>Dienstag früh · Beine</h3><span class="tag">ca. 45′</span></div><div class="note">RIR 2: Beende die meisten Sätze mit ungefähr 2 sauberen Wiederholungen „im Tank“. Keine extra Aufwärmphase im Plan.</div><label class="item "><input type="checkbox" onchange="toggle('w1-legs-0')"><span class="txt"><strong>Kniebeuge / Hack Squat</strong><br><span class="small">3 Sätze × 6–8 · Pause 2–3′</span><br><a class="video" href="https://www.youtube.com/watch?v=UFs6E3Ti1jg" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label><label class="item "><input type="checkbox" onchange="toggle('w1-legs-1')"><span class="txt"><strong>Rumänisches Kreuzheben</strong><br><span class="small">3 Sätze × 8–10 · Pause 2′</span><br><a class="video" href="https://www.youtube.com/watch?v=yac3o7xnA4s" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label><label class="item "><input type="checkbox" onchange="toggle('w1-legs-2')"><span class="txt"><strong>Beinpresse</strong><br><span class="small">2 Sätze × 10–12 · Pause 90″</span><br><a class="video" href="https://www.youtube.com/results?search_query=leg+press+proper+form" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label><label class="item "><input type="checkbox" onchange="toggle('w1-legs-3')"><span class="txt"><strong>Beinbeuger</strong><br><span class="small">2 Sätze × 10–12 · Pause 75–90″</span><br><a class="video" href="https://www.youtube.com/results?search_query=leg+curl+proper+form" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label><label class="item "><input type="checkbox" onchange="toggle('w1-legs-4')"><span class="txt"><strong>Wadenheben</strong><br><span class="small">2 Sätze × 12–15 · Pause 60″</span><br><a class="video" href="https://www.youtube.com/results?search_query=standing+calf+raise+proper+form" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label><label class="item "><input type="checkbox" onchange="toggle('w1-legs-5')"><span class="txt"><strong>Plank</strong><br><span class="small">2 Sätze × 40–60 s · Pause 45–60″</span><br><a class="video" href="https://www.youtube.com/results?search_query=plank+proper+form" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label></div><div class="card"><div class="day"><h3>Dienstag Abend · Lauf</h3><span class="tag">Plan</span></div><label class="item "><input type="checkbox" onchange="toggle('w1-run-0')"><span class="txt">10′ sehr locker</span></label><label class="item "><input type="checkbox" onchange="toggle('w1-run-1')"><span class="txt">6 × 2′ zügig (RPE 7/10) / 2′ locker</span></label><label class="item "><input type="checkbox" onchange="toggle('w1-run-2')"><span class="txt">8–10′ locker auslaufen</span></label></div><div class="card"><div class="day"><h3>Mittwoch früh · Rolle</h3><span class="tag">≤ 60′</span></div><label class="item "><input type="checkbox" onchange="toggle('w1-wed-0')"><span class="txt">10′ locker 100–130 W</span></label><label class="item "><input type="checkbox" onchange="toggle('w1-wed-1')"><span class="txt">3 × 8′ @ 170–178 W</span></label><label class="item "><input type="checkbox" onchange="toggle('w1-wed-2')"><span class="txt">4′ locker 100–125 W zwischen den Intervallen</span></label><label class="item "><input type="checkbox" onchange="toggle('w1-wed-3')"><span class="txt">5–8′ locker ausfahren</span></label></div><div class="card"><div class="day"><h3>Donnerstag früh · Oberkörper</h3><span class="tag">ca. 45′</span></div><div class="note">RIR 2: Beende die meisten Sätze mit ungefähr 2 sauberen Wiederholungen „im Tank“. Keine extra Aufwärmphase im Plan.</div><label class="item "><input type="checkbox" onchange="toggle('w1-upper-0')"><span class="txt"><strong>Bankdrücken / Brustpresse</strong><br><span class="small">3 Sätze × 6–10 · Pause 2′</span><br><a class="video" href="https://www.youtube.com/results?search_query=bench+press+proper+form" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label><label class="item "><input type="checkbox" onchange="toggle('w1-upper-1')"><span class="txt"><strong>Kabelrudern sitzend</strong><br><span class="small">3 Sätze × 8–12 · Pause 90″</span><br><a class="video" href="https://www.youtube.com/watch?v=sP_4vybjVJs" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label><label class="item "><input type="checkbox" onchange="toggle('w1-upper-2')"><span class="txt"><strong>Latzug</strong><br><span class="small">3 Sätze × 8–12 · Pause 90″</span><br><a class="video" href="https://www.youtube.com/watch?v=MyQVLFBwlJ8" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label><label class="item "><input type="checkbox" onchange="toggle('w1-upper-3')"><span class="txt"><strong>Schulterdrücken</strong><br><span class="small">2 Sätze × 8–10 · Pause 90″</span><br><a class="video" href="https://www.youtube.com/results?search_query=seated+shoulder+press+proper+form" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label><label class="item "><input type="checkbox" onchange="toggle('w1-upper-4')"><span class="txt"><strong>Face Pull / Reverse Fly</strong><br><span class="small">2 Sätze × 12–15 · Pause 60″</span><br><a class="video" href="https://www.youtube.com/results?search_query=face+pull+proper+form" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label><label class="item "><input type="checkbox" onchange="toggle('w1-upper-5')"><span class="txt"><strong>Trizepsdrücken + Bizepscurls</strong><br><span class="small">2 Sätze × 10–12 je Übung · Pause 45–60″</span><br><a class="video" href="https://www.youtube.com/results?search_query=cable+triceps+pushdown+biceps+curl+proper+form" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label></div><div class="card"><div class="day"><h3>Freitag · Vereinslauf</h3><span class="tag">Abschluss</span></div><label class="item "><input type="checkbox" onchange="toggle('w1-fri-0')"><span class="txt">Vereinstraining abgeschlossen</span></label></div><div class="card"><div class="day"><h3>Samstag · Rolle + Schwimmen</h3><span class="tag">Rad + Abschluss</span></div><label class="item "><input type="checkbox" onchange="toggle('w1-sat-0')"><span class="txt">60′ gesamt @ 120–140 W</span></label><label class="item "><input type="checkbox" onchange="toggle('w1-sat-1')"><span class="txt">2 × 6′ @ 160–170 W</span></label><label class="item "><input type="checkbox" onchange="toggle('w1-sat-2')"><span class="txt">5′ locker zwischen den Tempoabschnitten</span></label><label class="item "><input type="checkbox" onchange="toggle('w1-sat-3')"><span class="txt">Schwimmtraining abgeschlossen</span></label></div><div class="card"><div class="day"><h3>Sonntag · langer Lauf</h3><span class="tag">Abschluss</span></div><label class="item "><input type="checkbox" onchange="toggle('w1-sun-0')"><span class="txt">Langer Lauf abgeschlossen</span></label></div></div></div></div>
+                    <div class="controls"><button class="btn" onclick="resetWeek()">Aktuelle Woche zurücksetzen</button><button class="btn" onclick="resetAll()">Alle Wochen zurücksetzen</button></div>
+                      <div class="footer">Video-Links in Woche 1 öffnen YouTube-Videos zur Übungstechnik. Bei Schmerzen oder auffälligen Beschwerden Training abbrechen und fachlich abklären lassen.</div>
+                      </div>
+                      <script>
+                      const weeks=[
+                      {n:1,rad:["10′ locker 100–130 W","3 × 8′ @ 170–178 W","4′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["60′ gesamt @ 120–140 W","2 × 6′ @ 160–170 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","6 × 2′ zügig (RPE 7/10) / 2′ locker","8–10′ locker auslaufen" ]},
+                      {n:2,rad:["10′ locker 100–130 W","3 × 10′ @ 170–178 W","4′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["65′ gesamt @ 120–145 W","2 × 8′ @ 160–170 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","5 × 3′ zügig (RPE 7/10) / 2′ locker","8–10′ locker auslaufen"]},
+                      {n:3,rad:["10′ locker 100–130 W","3 × 12′ @ 170–179 W","4′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["70′ gesamt @ 120–145 W","2 × 10′ @ 160–170 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","4 × 4′ zügig (RPE 7–8/10) / 2′ locker","8–10′ locker auslaufen"]},
+                      {n:4,rad:["10′ locker","2 × 8′ @ 165–172 W","4′ locker zwischen den Intervallen","10′ locker ausfahren"],sat:["45–60′ locker @ 115–140 W"],run:["35–45′ locker, RPE 3–4/10","Keine Intervalle – Entlastungswoche"]},
+                      {n:5,rad:["10′ locker 100–130 W","3 × 12′ @ 180–188 W","5′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["70–75′ gesamt @ 120–145 W","2 × 12′ @ 160–172 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","5 × 4′ zügig (RPE 7–8/10) / 2′ locker","8–10′ locker auslaufen"]},
+                      {n:6,rad:["10′ locker 100–130 W","2 × 15′ @ 182–190 W","6′ locker 100–125 W zwischen den Intervallen","8–10′ locker ausfahren"],sat:["75–80′ gesamt @ 120–145 W","3 × 8′ @ 170–178 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","3 × 8′ zügig-kontrolliert (RPE 7/10) / 3′ locker","8–10′ locker auslaufen"]},
+                      {n:7,rad:["10′ locker 100–130 W","3 × 15′ @ 182–190 W","5′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["60–75′ überwiegend @ 120–145 W","Optional 2 × 8′ @ 160–170 W, nur wenn frisch","5′ locker dazwischen"],run:["10′ sehr locker","6 × 3′ zügig (RPE 7–8/10) / 2′ locker","8–10′ locker auslaufen"]},
+                      {n:8,rad:["10′ locker","FTP-Test: 5′ hart, 10′ locker, dann 20′ möglichst gleichmäßig hart","FTP-Schätzung: 20′ Durchschnitt × 0,95","Rest der Stunde locker ausfahren"],sat:["45–60′ sehr locker @ 115–140 W"],run:["30–45′ locker, RPE 3–4/10","Keine harte Laufqualität in der Testwoche"]}
+                      ];
+                      const gym={
+                      legs:[
+                      ["Kniebeuge / Hack Squat",3,"6–8","2–3′","https://www.youtube.com/watch?v=UFs6E3Ti1jg"],
+                      ["Rumänisches Kreuzheben",3,"8–10","2′","https://www.youtube.com/watch?v=yac3o7xnA4s"],
+                      ["Beinpresse",2,"10–12","90″","https://www.youtube.com/results?search_query=leg+press+proper+form"],
+                      ["Beinbeuger",2,"10–12","75–90″","https://www.youtube.com/results?search_query=leg+curl+proper+form"],
+                      ["Wadenheben",2,"12–15","60″","https://www.youtube.com/results?search_query=standing+calf+raise+proper+form"],
+                      ["Plank",2,"40–60 s","45–60″","https://www.youtube.com/results?search_query=plank+proper+form"]],
+                      upper:[
+                      ["Bankdrücken / Brustpresse",3,"6–10","2′","https://www.youtube.com/results?search_query=bench+press+proper+form"],
+                      ["Kabelrudern sitzend",3,"8–12","90″","https://www.youtube.com/watch?v=sP_4vybjVJs"],
+                      ["Latzug",3,"8–12","90″","https://www.youtube.com/watch?v=MyQVLFBwlJ8"],
+                      ["Schulterdrücken",2,"8–10","90″","https://www.youtube.com/results?search_query=seated+shoulder+press+proper+form"],
+                      ["Face Pull / Reverse Fly",2,"12–15","60″","https://www.youtube.com/results?search_query=face+pull+proper+form"],
+                      ["Trizepsdrücken + Bizepscurls",2,"10–12 je Übung","45–60″","https://www.youtube.com/results?search_query=cable+triceps+pushdown+biceps+curl+proper+form"]]};
+                      function key(w,d,i){return `w${w}-${d}-${i}`}
+                      function checked(k){return localStorage.getItem(k)==='1'}
+                      function set(k,v){v?localStorage.setItem(k,'1'):localStorage.removeItem(k)}
+                      function toggle(k){set(k,!checked(k));render()}
+                      function exerciseRows(w,day,arr){return arr.map((x,i)=>`<label class="item ${checked(key(w,day,i))?'done':''}"><input type="checkbox" ${checked(key(w,day,i))?'checked':''} onchange="toggle('${key(w,day,i)}')"><span class="txt">${x}</span></label>`).join('')}
+                      function gymCard(w,type,title,rows){let html=rows.map((r,i)=>`<label class="item ${checked(key(w,type,i))?'done':''}"><input type="checkbox" ${checked(key(w,type,i))?'checked':''} onchange="toggle('${key(w,type,i)}')"><span class="txt"><strong>${r[0]}</strong><br><span class="small">${r[1]} Sätze × ${r[2]} · Pause ${r[3]}</span><br><a class="video" href="${r[4]}" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label>`).join('');return `<div class="card"><div class="day"><h3>${title}</h3><span class="tag">ca. 45′</span></div><div class="note">RIR 2: Beende die meisten Sätze mit ungefähr 2 sauberen Wiederholungen „im Tank“. Keine extra Aufwärmphase im Plan.</div>${html}</div>`}
+                      function simpleCard(w,day,title,tag,items){return `<div class="card"><div class="day"><h3>${title}</h3><span class="tag">${tag}</span></div>${exerciseRows(w,day,items)}</div>`}
+                      function render(){const w=weeks[window.current||0];document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===(window.current||0)));let c=`<div class="week-summary"><span class="pill">Woche ${w.n}</span><span class="pill">FTP 190 W</span><span class="pill">Rad: Mittwoch + Samstag</span></div><div class="grid">`;
+                      c+=simpleCard(w.n,'mon','Montag · Schwimmen','Abschluss',['Schwimmtraining abgeschlossen']);
+                      c+=gymCard(w.n,'legs','Dienstag früh · Beine',gym.legs);
+                      c+=simpleCard(w.n,'run', 'Dienstag Abend · Lauf','Plan',w.run);
+                      c+=simpleCard(w.n,'wed','Mittwoch früh · Rolle','≤ 60′',w.rad);
+                      c+=gymCard(w.n,'upper','Donnerstag früh · Oberkörper',gym.upper);
+                      c+=simpleCard(w.n,'fri','Freitag · Vereinslauf','Abschluss',['Vereinstraining abgeschlossen']);
+                      c+=simpleCard(w.n,'sat','Samstag · Rolle + Schwimmen','Rad + Abschluss',w.sat.concat(['Schwimmtraining abgeschlossen']));
+                      c+=simpleCard(w.n,'sun','Sonntag · langer Lauf','Abschluss',['Langer Lauf abgeschlossen']);
+                      c+='</div>';document.getElementById('content').innerHTML=c;updateProgress()}
+                      function updateProgress(){const all=[...document.querySelectorAll('input[type=checkbox]')];const done=all.filter(x=>x.checked).length;const pct=all.length?Math.round(done/all.length*100):0;document.querySelector('.stats').title=`${done} von ${all.length} Punkten erledigt`;document.getElementById('progressNum').textContent=pct+'%';document.getElementById('progressFill').style.width=pct+'%';setToday()}
+                      function setToday(){const d=new Date().getDay();const map={1:['Montag','Schwimmen – kein detaillierter Plan'],2:['Dienstag','Früh: Beine · Abend: Lauftraining'],3:['Mittwoch','Rolle – FTP-Intervalle, maximal 60 Minuten'],4:['Donnerstag','Oberkörper – ca. 45 Minuten'],5:['Freitag','Vereinslauf – kein detaillierter Plan'],6:['Samstag','Rolle + Schwimmen'],0:['Sonntag','Langer Lauf – kein detaillierter Plan']};const t=map[d];document.getElementById('todayTitle').textContent='Heute · '+t[0];document.getElementById('todayText').textContent=t[1]}
+                      function resetWeek(){const w=weeks[window.current||0].n;Object.keys(localStorage).filter(k=>k.startsWith('w'+w+'-')).forEach(k=>localStorage.removeItem(k));render()}
+                      function resetAll(){Object.keys(localStorage).filter(k=>k.startsWith('w')).forEach(k=>localStorage.removeItem(k));render()}
+                      window.current=0;document.getElementById('tabs').innerHTML=weeks.map((w,i)=>`<button class="tab ${i===0?'active':''}" onclick="window.current=${i};render()">Woche ${w.n}</button>`).join('');render();
+                      </script>
+                      
+                      
+                      
+                      
+                      <meta charset="utf-8">
+                      <meta name="viewport" content="width=device-width, initial-scale=1">
+                      <title>Winter Training</title>
+                      <style>
+                      :root{color-scheme:light dark;--bg:light-dark(#f4f6f7,#101416);--card:light-dark(#fff,#171c1f);--text:light-dark(#172126,#eef2f3);--muted:light-dark(#64727a,#9eabb1);--line:light-dark(#dbe1e4,#303a3f);--accent:light-dark(#087f8c,#52c6d1);--soft:light-dark(#e8f4f5,#19353a);--done:light-dark(#e7f5e9,#18351f)}
+                      *{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}#app{min-height:100vh;background:var(--bg);padding:24px clamp(16px,4vw,48px) 48px}h1,h2,h3{margin:0 0 10px}h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.03em}h2{font-size:24px;margin-top:8px}.sub{color:var(--muted);max-width:800px;line-height:1.5}.top{display:flex;gap:16px;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;margin-bottom:22px}.stats{display:flex;gap:10px;flex-wrap:wrap}.pill{background:var(--soft);padding:9px 12px;border-radius:999px;font-size:13px}.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:10px;margin-bottom:14px}.tab{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:10px;padding:10px 14px;cursor:pointer;white-space:nowrap}.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.04)}.day{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.day h3{font-size:18px}.tag{font-size:11px;padding:5px 8px;border-radius:999px;background:var(--soft);color:var(--accent);white-space:nowrap}.note{color:var(--muted);font-size:13px;line-height:1.45;margin:4px 0 12px}.item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}.item:first-of-type{border-top:0}.item input{width:20px;height:20px;margin-top:1px;accent-color:var(--accent);flex:0 0 auto}.item.done .txt{text-decoration:line-through;opacity:.55}.txt{line-height:1.4}.small{font-size:12px;color:var(--muted)}.section{margin-top:24px}.wide{grid-column:1/-1}.video{display:inline-block;margin-top:7px;font-size:12px;color:var(--accent);text-decoration:none}.video:hover{text-decoration:underline}.week-summary{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}.fill{height:100%;background:var(--accent);width:0}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.btn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:9px;padding:9px 12px;cursor:pointer}.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.warning{background:light-dark(#fff6e3,#3a2d12);border:1px solid light-dark(#f0d49a,#6a5424);padding:13px 15px;border-radius:12px;line-height:1.45;font-size:13px}.footer{margin-top:28px;color:var(--muted);font-size:12px;line-height:1.5}
+                      </style>
+                      
+                      
+                      <div id="app">
+                        <div class="top">
+                            <div><h1>8-Wochen Trainingsplan</h1><div class="sub">Abhakbarer Winterplan mit Schwerpunkt FTP-Entwicklung. FTP-Ausgangswert: <strong>190 W</strong>. Rad nur Mittwoch und Samstag.</div></div>
+                                <div class="stats"><span class="pill">🏊 Mo: Schwimmen</span><span class="pill">🚴 Mi: Rolle ≤60′</span><span class="pill">🚴 Sa: Rolle</span><span class="pill">🏃 So: langer Lauf</span></div>
+                                  </div>
+                                    <div class="hero"><div class="small">WINTER TRAINING · 8 WOCHEN</div><h2 id="todayTitle">Heute</h2><div class="muted" id="todayText">Deine heutige Einheit wird hier angezeigt.</div><div class="today-grid"><div class="progress-wrap"><div class="progress-num" id="progressNum">0%</div><div class="metric">Wochenfortschritt</div><div class="bar" style="margin-top:9px"><div class="fill" id="progressFill"></div></div></div><div class="progress-wrap"><div class="progress-num">190 W</div><div class="metric">Aktuelle FTP</div><div class="metric" style="margin-top:7px">Rad: Mi + Sa</div></div></div></div>
+                                      <div class="warning">Steuerung: Die Wattwerte sind auf FTP 190 W gerechnet. Wenn eine Einheit ungewöhnlich schwer ist oder die Beine vom Dienstagstraining noch müde sind, Intensität reduzieren. Krafttraining ohne separates Aufwärmprogramm; erste Arbeitssätze trotzdem kontrolliert und nicht bis zum Muskelversagen.</div>
+                                        <div class="section"><div class="tabs" id="tabs"></div><div id="content"></div></div>
+                                          <div class="controls"><button class="btn" onclick="resetWeek()">Aktuelle Woche zurücksetzen</button><button class="btn" onclick="resetAll()">Alle Wochen zurücksetzen</button></div>
+                                            <div class="footer">Video-Links in Woche 1 öffnen YouTube-Videos zur Übungstechnik. Bei Schmerzen oder auffälligen Beschwerden Training abbrechen und fachlich abklären lassen.</div>
+                                            </div>
+                                            <script>
+                                            const weeks=[
+                                            {n:1,rad:["10′ locker 100–130 W","3 × 8′ @ 170–178 W","4′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["60′ gesamt @ 120–140 W","2 × 6′ @ 160–170 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","6 × 2′ zügig (RPE 7/10) / 2′ locker","8–10′ locker auslaufen" ]},
+                                            {n:2,rad:["10′ locker 100–130 W","3 × 10′ @ 170–178 W","4′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["65′ gesamt @ 120–145 W","2 × 8′ @ 160–170 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","5 × 3′ zügig (RPE 7/10) / 2′ locker","8–10′ locker auslaufen"]},
+                                            {n:3,rad:["10′ locker 100–130 W","3 × 12′ @ 170–179 W","4′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["70′ gesamt @ 120–145 W","2 × 10′ @ 160–170 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","4 × 4′ zügig (RPE 7–8/10) / 2′ locker","8–10′ locker auslaufen"]},
+                                            {n:4,rad:["10′ locker","2 × 8′ @ 165–172 W","4′ locker zwischen den Intervallen","10′ locker ausfahren"],sat:["45–60′ locker @ 115–140 W"],run:["35–45′ locker, RPE 3–4/10","Keine Intervalle – Entlastungswoche"]},
+                                            {n:5,rad:["10′ locker 100–130 W","3 × 12′ @ 180–188 W","5′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["70–75′ gesamt @ 120–145 W","2 × 12′ @ 160–172 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","5 × 4′ zügig (RPE 7–8/10) / 2′ locker","8–10′ locker auslaufen"]},
+                                            {n:6,rad:["10′ locker 100–130 W","2 × 15′ @ 182–190 W","6′ locker 100–125 W zwischen den Intervallen","8–10′ locker ausfahren"],sat:["75–80′ gesamt @ 120–145 W","3 × 8′ @ 170–178 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","3 × 8′ zügig-kontrolliert (RPE 7/10) / 3′ locker","8–10′ locker auslaufen"]},
+                                            {n:7,rad:["10′ locker 100–130 W","3 × 15′ @ 182–190 W","5′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["60–75′ überwiegend @ 120–145 W","Optional 2 × 8′ @ 160–170 W, nur wenn frisch","5′ locker dazwischen"],run:["10′ sehr locker","6 × 3′ zügig (RPE 7–8/10) / 2′ locker","8–10′ locker auslaufen"]},
+                                            {n:8,rad:["10′ locker","FTP-Test: 5′ hart, 10′ locker, dann 20′ möglichst gleichmäßig hart","FTP-Schätzung: 20′ Durchschnitt × 0,95","Rest der Stunde locker ausfahren"],sat:["45–60′ sehr locker @ 115–140 W"],run:["30–45′ locker, RPE 3–4/10","Keine harte Laufqualität in der Testwoche"]}
+                                            ];
+                                            const gym={
+                                            legs:[
+                                            ["Kniebeuge / Hack Squat",3,"6–8","2–3′","https://www.youtube.com/watch?v=UFs6E3Ti1jg"],
+                                            ["Rumänisches Kreuzheben",3,"8–10","2′","https://www.youtube.com/watch?v=yac3o7xnA4s"],
+                                            ["Beinpresse",2,"10–12","90″","https://www.youtube.com/results?search_query=leg+press+proper+form"],
+                                            ["Beinbeuger",2,"10–12","75–90″","https://www.youtube.com/results?search_query=leg+curl+proper+form"],
+                                            ["Wadenheben",2,"12–15","60″","https://www.youtube.com/results?search_query=standing+calf+raise+proper+form"],
+                                            ["Plank",2,"40–60 s","45–60″","https://www.youtube.com/results?search_query=plank+proper+form"]],
+                                            upper:[
+                                            ["Bankdrücken / Brustpresse",3,"6–10","2′","https://www.youtube.com/results?search_query=bench+press+proper+form"],
+                                            ["Kabelrudern sitzend",3,"8–12","90″","https://www.youtube.com/watch?v=sP_4vybjVJs"],
+                                            ["Latzug",3,"8–12","90″","https://www.youtube.com/watch?v=MyQVLFBwlJ8"],
+                                            ["Schulterdrücken",2,"8–10","90″","https://www.youtube.com/results?search_query=seated+shoulder+press+proper+form"],
+                                            ["Face Pull / Reverse Fly",2,"12–15","60″","https://www.youtube.com/results?search_query=face+pull+proper+form"],
+                                            ["Trizepsdrücken + Bizepscurls",2,"10–12 je Übung","45–60″","https://www.youtube.com/results?search_query=cable+triceps+pushdown+biceps+curl+proper+form"]]};
+                                            function key(w,d,i){return `w${w}-${d}-${i}`}
+                                            function checked(k){return localStorage.getItem(k)==='1'}
+                                            function set(k,v){v?localStorage.setItem(k,'1'):localStorage.removeItem(k)}
+                                            function toggle(k){set(k,!checked(k));render()}
+                                            function exerciseRows(w,day,arr){return arr.map((x,i)=>`<label class="item ${checked(key(w,day,i))?'done':''}"><input type="checkbox" ${checked(key(w,day,i))?'checked':''} onchange="toggle('${key(w,day,i)}')"><span class="txt">${x}</span></label>`).join('')}
+                                            function gymCard(w,type,title,rows){let html=rows.map((r,i)=>`<label class="item ${checked(key(w,type,i))?'done':''}"><input type="checkbox" ${checked(key(w,type,i))?'checked':''} onchange="toggle('${key(w,type,i)}')"><span class="txt"><strong>${r[0]}</strong><br><span class="small">${r[1]} Sätze × ${r[2]} · Pause ${r[3]}</span><br><a class="video" href="${r[4]}" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label>`).join('');return `<div class="card"><div class="day"><h3>${title}</h3><span class="tag">ca. 45′</span></div><div class="note">RIR 2: Beende die meisten Sätze mit ungefähr 2 sauberen Wiederholungen „im Tank“. Keine extra Aufwärmphase im Plan.</div>${html}</div>`}
+                                            function simpleCard(w,day,title,tag,items){return `<div class="card"><div class="day"><h3>${title}</h3><span class="tag">${tag}</span></div>${exerciseRows(w,day,items)}</div>`}
+                                            function render(){const w=weeks[window.current||0];document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===(window.current||0)));let c=`<div class="week-summary"><span class="pill">Woche ${w.n}</span><span class="pill">FTP 190 W</span><span class="pill">Rad: Mittwoch + Samstag</span></div><div class="grid">`;
+                                            c+=simpleCard(w.n,'mon','Montag · Schwimmen','Abschluss',['Schwimmtraining abgeschlossen']);
+                                            c+=gymCard(w.n,'legs','Dienstag früh · Beine',gym.legs);
+                                            c+=simpleCard(w.n,'run', 'Dienstag Abend · Lauf','Plan',w.run);
+                                            c+=simpleCard(w.n,'wed','Mittwoch früh · Rolle','≤ 60′',w.rad);
+                                            c+=gymCard(w.n,'upper','Donnerstag früh · Oberkörper',gym.upper);
+                                            c+=simpleCard(w.n,'fri','Freitag · Vereinslauf','Abschluss',['Vereinstraining abgeschlossen']);
+                                            c+=simpleCard(w.n,'sat','Samstag · Rolle + Schwimmen','Rad + Abschluss',w.sat.concat(['Schwimmtraining abgeschlossen']));
+                                            c+=simpleCard(w.n,'sun','Sonntag · langer Lauf','Abschluss',['Langer Lauf abgeschlossen']);
+                                            c+='</div>';document.getElementById('content').innerHTML=c;updateProgress()}
+                                            function updateProgress(){const all=[...document.querySelectorAll('input[type=checkbox]')];const done=all.filter(x=>x.checked).length;const pct=all.length?Math.round(done/all.length*100):0;document.querySelector('.stats').title=`${done} von ${all.length} Punkten erledigt`;document.getElementById('progressNum').textContent=pct+'%';document.getElementById('progressFill').style.width=pct+'%';setToday()}
+                                            function setToday(){const d=new Date().getDay();const map={1:['Montag','Schwimmen – kein detaillierter Plan'],2:['Dienstag','Früh: Beine · Abend: Lauftraining'],3:['Mittwoch','Rolle – FTP-Intervalle, maximal 60 Minuten'],4:['Donnerstag','Oberkörper – ca. 45 Minuten'],5:['Freitag','Vereinslauf – kein detaillierter Plan'],6:['Samstag','Rolle + Schwimmen'],0:['Sonntag','Langer Lauf – kein detaillierter Plan']};const t=map[d];document.getElementById('todayTitle').textContent='Heute · '+t[0];document.getElementById('todayText').textContent=t[1]}
+                                            function resetWeek(){const w=weeks[window.current||0].n;Object.keys(localStorage).filter(k=>k.startsWith('w'+w+'-')).forEach(k=>localStorage.removeItem(k));render()}
+                                            function resetAll(){Object.keys(localStorage).filter(k=>k.startsWith('w')).forEach(k=>localStorage.removeItem(k));render()}
+                                            window.current=0;document.getElementById('tabs').innerHTML=weeks.map((w,i)=>`<button class="tab ${i===0?'active':''}" onclick="window.current=${i};render()">Woche ${w.n}</button>`).join('');render();
+                                            </script>
+                                            
+                                            
+                                            
+                                            
+                                            <meta charset="utf-8">
+                                            <meta name="viewport" content="width=device-width, initial-scale=1">
+                                            <title>Winter Training</title>
+                                            <style>
+                                            :root{color-scheme:light dark;--bg:light-dark(#f4f6f7,#101416);--card:light-dark(#fff,#171c1f);--text:light-dark(#172126,#eef2f3);--muted:light-dark(#64727a,#9eabb1);--line:light-dark(#dbe1e4,#303a3f);--accent:light-dark(#087f8c,#52c6d1);--soft:light-dark(#e8f4f5,#19353a);--done:light-dark(#e7f5e9,#18351f)}
+                                            *{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}#app{min-height:100vh;background:var(--bg);padding:24px clamp(16px,4vw,48px) 48px}h1,h2,h3{margin:0 0 10px}h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.03em}h2{font-size:24px;margin-top:8px}.sub{color:var(--muted);max-width:800px;line-height:1.5}.top{display:flex;gap:16px;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;margin-bottom:22px}.stats{display:flex;gap:10px;flex-wrap:wrap}.pill{background:var(--soft);padding:9px 12px;border-radius:999px;font-size:13px}.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:10px;margin-bottom:14px}.tab{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:10px;padding:10px 14px;cursor:pointer;white-space:nowrap}.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.04)}.day{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.day h3{font-size:18px}.tag{font-size:11px;padding:5px 8px;border-radius:999px;background:var(--soft);color:var(--accent);white-space:nowrap}.note{color:var(--muted);font-size:13px;line-height:1.45;margin:4px 0 12px}.item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}.item:first-of-type{border-top:0}.item input{width:20px;height:20px;margin-top:1px;accent-color:var(--accent);flex:0 0 auto}.item.done .txt{text-decoration:line-through;opacity:.55}.txt{line-height:1.4}.small{font-size:12px;color:var(--muted)}.section{margin-top:24px}.wide{grid-column:1/-1}.video{display:inline-block;margin-top:7px;font-size:12px;color:var(--accent);text-decoration:none}.video:hover{text-decoration:underline}.week-summary{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}.fill{height:100%;background:var(--accent);width:0}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.btn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:9px;padding:9px 12px;cursor:pointer}.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.warning{background:light-dark(#fff6e3,#3a2d12);border:1px solid light-dark(#f0d49a,#6a5424);padding:13px 15px;border-radius:12px;line-height:1.45;font-size:13px}.footer{margin-top:28px;color:var(--muted);font-size:12px;line-height:1.5}
+                                            </style>
+                                            
+                                            
+                                            <div id="app">
+                                              <div class="top">
+                                                  <div><h1>8-Wochen Trainingsplan</h1><div class="sub">Abhakbarer Winterplan mit Schwerpunkt FTP-Entwicklung. FTP-Ausgangswert: <strong>190 W</strong>. Rad nur Mittwoch und Samstag.</div></div>
+                                                      <div class="stats"><span class="pill">🏊 Mo: Schwimmen</span><span class="pill">🚴 Mi: Rolle ≤60′</span><span class="pill">🚴 Sa: Rolle</span><span class="pill">🏃 So: langer Lauf</span></div>
+                                                        </div>
+                                                          <div class="hero"><div class="small">WINTER TRAINING · 8 WOCHEN</div><h2 id="todayTitle">Heute</h2><div class="muted" id="todayText">Deine heutige Einheit wird hier angezeigt.</div><div class="today-grid"><div class="progress-wrap"><div class="progress-num" id="progressNum">0%</div><div class="metric">Wochenfortschritt</div><div class="bar" style="margin-top:9px"><div class="fill" id="progressFill"></div></div></div><div class="progress-wrap"><div class="progress-num">190 W</div><div class="metric">Aktuelle FTP</div><div class="metric" style="margin-top:7px">Rad: Mi + Sa</div></div></div></div>
+                                                            <div class="warning">Steuerung: Die Wattwerte sind auf FTP 190 W gerechnet. Wenn eine Einheit ungewöhnlich schwer ist oder die Beine vom Dienstagstraining noch müde sind, Intensität reduzieren. Krafttraining ohne separates Aufwärmprogramm; erste Arbeitssätze trotzdem kontrolliert und nicht bis zum Muskelversagen.</div>
+                                                              <div class="section"><div class="tabs" id="tabs"></div><div id="content"></div></div>
+                                                                <div class="controls"><button class="btn" onclick="resetWeek()">Aktuelle Woche zurücksetzen</button><button class="btn" onclick="resetAll()">Alle Wochen zurücksetzen</button></div>
+                                                                  <div class="footer">Video-Links in Woche 1 öffnen YouTube-Videos zur Übungstechnik. Bei Schmerzen oder auffälligen Beschwerden Training abbrechen und fachlich abklären lassen.</div>
+                                                                  </div>
+                                                                  <script>
+                                                                  const weeks=[
+                                                                  {n:1,rad:["10′ locker 100–130 W","3 × 8′ @ 170–178 W","4′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["60′ gesamt @ 120–140 W","2 × 6′ @ 160–170 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","6 × 2′ zügig (RPE 7/10) / 2′ locker","8–10′ locker auslaufen" ]},
+                                                                  {n:2,rad:["10′ locker 100–130 W","3 × 10′ @ 170–178 W","4′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["65′ gesamt @ 120–145 W","2 × 8′ @ 160–170 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","5 × 3′ zügig (RPE 7/10) / 2′ locker","8–10′ locker auslaufen"]},
+                                                                  {n:3,rad:["10′ locker 100–130 W","3 × 12′ @ 170–179 W","4′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["70′ gesamt @ 120–145 W","2 × 10′ @ 160–170 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","4 × 4′ zügig (RPE 7–8/10) / 2′ locker","8–10′ locker auslaufen"]},
+                                                                  {n:4,rad:["10′ locker","2 × 8′ @ 165–172 W","4′ locker zwischen den Intervallen","10′ locker ausfahren"],sat:["45–60′ locker @ 115–140 W"],run:["35–45′ locker, RPE 3–4/10","Keine Intervalle – Entlastungswoche"]},
+                                                                  {n:5,rad:["10′ locker 100–130 W","3 × 12′ @ 180–188 W","5′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["70–75′ gesamt @ 120–145 W","2 × 12′ @ 160–172 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","5 × 4′ zügig (RPE 7–8/10) / 2′ locker","8–10′ locker auslaufen"]},
+                                                                  {n:6,rad:["10′ locker 100–130 W","2 × 15′ @ 182–190 W","6′ locker 100–125 W zwischen den Intervallen","8–10′ locker ausfahren"],sat:["75–80′ gesamt @ 120–145 W","3 × 8′ @ 170–178 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","3 × 8′ zügig-kontrolliert (RPE 7/10) / 3′ locker","8–10′ locker auslaufen"]},
+                                                                  {n:7,rad:["10′ locker 100–130 W","3 × 15′ @ 182–190 W","5′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["60–75′ überwiegend @ 120–145 W","Optional 2 × 8′ @ 160–170 W, nur wenn frisch","5′ locker dazwischen"],run:["10′ sehr locker","6 × 3′ zügig (RPE 7–8/10) / 2′ locker","8–10′ locker auslaufen"]},
+                                                                  {n:8,rad:["10′ locker","FTP-Test: 5′ hart, 10′ locker, dann 20′ möglichst gleichmäßig hart","FTP-Schätzung: 20′ Durchschnitt × 0,95","Rest der Stunde locker ausfahren"],sat:["45–60′ sehr locker @ 115–140 W"],run:["30–45′ locker, RPE 3–4/10","Keine harte Laufqualität in der Testwoche"]}
+                                                                  ];
+                                                                  const gym={
+                                                                  legs:[
+                                                                  ["Kniebeuge / Hack Squat",3,"6–8","2–3′","https://www.youtube.com/watch?v=UFs6E3Ti1jg"],
+                                                                  ["Rumänisches Kreuzheben",3,"8–10","2′","https://www.youtube.com/watch?v=yac3o7xnA4s"],
+                                                                  ["Beinpresse",2,"10–12","90″","https://www.youtube.com/results?search_query=leg+press+proper+form"],
+                                                                  ["Beinbeuger",2,"10–12","75–90″","https://www.youtube.com/results?search_query=leg+curl+proper+form"],
+                                                                  ["Wadenheben",2,"12–15","60″","https://www.youtube.com/results?search_query=standing+calf+raise+proper+form"],
+                                                                  ["Plank",2,"40–60 s","45–60″","https://www.youtube.com/results?search_query=plank+proper+form"]],
+                                                                  upper:[
+                                                                  ["Bankdrücken / Brustpresse",3,"6–10","2′","https://www.youtube.com/results?search_query=bench+press+proper+form"],
+                                                                  ["Kabelrudern sitzend",3,"8–12","90″","https://www.youtube.com/watch?v=sP_4vybjVJs"],
+                                                                  ["Latzug",3,"8–12","90″","https://www.youtube.com/watch?v=MyQVLFBwlJ8"],
+                                                                  ["Schulterdrücken",2,"8–10","90″","https://www.youtube.com/results?search_query=seated+shoulder+press+proper+form"],
+                                                                  ["Face Pull / Reverse Fly",2,"12–15","60″","https://www.youtube.com/results?search_query=face+pull+proper+form"],
+                                                                  ["Trizepsdrücken + Bizepscurls",2,"10–12 je Übung","45–60″","https://www.youtube.com/results?search_query=cable+triceps+pushdown+biceps+curl+proper+form"]]};
+                                                                  function key(w,d,i){return `w${w}-${d}-${i}`}
+                                                                  function checked(k){return localStorage.getItem(k)==='1'}
+                                                                  function set(k,v){v?localStorage.setItem(k,'1'):localStorage.removeItem(k)}
+                                                                  function toggle(k){set(k,!checked(k));render()}
+                                                                  function exerciseRows(w,day,arr){return arr.map((x,i)=>`<label class="item ${checked(key(w,day,i))?'done':''}"><input type="checkbox" ${checked(key(w,day,i))?'checked':''} onchange="toggle('${key(w,day,i)}')"><span class="txt">${x}</span></label>`).join('')}
+                                                                  function gymCard(w,type,title,rows){let html=rows.map((r,i)=>`<label class="item ${checked(key(w,type,i))?'done':''}"><input type="checkbox" ${checked(key(w,type,i))?'checked':''} onchange="toggle('${key(w,type,i)}')"><span class="txt"><strong>${r[0]}</strong><br><span class="small">${r[1]} Sätze × ${r[2]} · Pause ${r[3]}</span><br><a class="video" href="${r[4]}" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label>`).join('');return `<div class="card"><div class="day"><h3>${title}</h3><span class="tag">ca. 45′</span></div><div class="note">RIR 2: Beende die meisten Sätze mit ungefähr 2 sauberen Wiederholungen „im Tank“. Keine extra Aufwärmphase im Plan.</div>${html}</div>`}
+                                                                  function simpleCard(w,day,title,tag,items){return `<div class="card"><div class="day"><h3>${title}</h3><span class="tag">${tag}</span></div>${exerciseRows(w,day,items)}</div>`}
+                                                                  function render(){const w=weeks[window.current||0];document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===(window.current||0)));let c=`<div class="week-summary"><span class="pill">Woche ${w.n}</span><span class="pill">FTP 190 W</span><span class="pill">Rad: Mittwoch + Samstag</span></div><div class="grid">`;
+                                                                  c+=simpleCard(w.n,'mon','Montag · Schwimmen','Abschluss',['Schwimmtraining abgeschlossen']);
+                                                                  c+=gymCard(w.n,'legs','Dienstag früh · Beine',gym.legs);
+                                                                  c+=simpleCard(w.n,'run', 'Dienstag Abend · Lauf','Plan',w.run);
+                                                                  c+=simpleCard(w.n,'wed','Mittwoch früh · Rolle','≤ 60′',w.rad);
+                                                                  c+=gymCard(w.n,'upper','Donnerstag früh · Oberkörper',gym.upper);
+                                                                  c+=simpleCard(w.n,'fri','Freitag · Vereinslauf','Abschluss',['Vereinstraining abgeschlossen']);
+                                                                  c+=simpleCard(w.n,'sat','Samstag · Rolle + Schwimmen','Rad + Abschluss',w.sat.concat(['Schwimmtraining abgeschlossen']));
+                                                                  c+=simpleCard(w.n,'sun','Sonntag · langer Lauf','Abschluss',['Langer Lauf abgeschlossen']);
+                                                                  c+='</div>';document.getElementById('content').innerHTML=c;updateProgress()}
+                                                                  function updateProgress(){const all=[...document.querySelectorAll('input[type=checkbox]')];const done=all.filter(x=>x.checked).length;const pct=all.length?Math.round(done/all.length*100):0;document.querySelector('.stats').title=`${done} von ${all.length} Punkten erledigt`;document.getElementById('progressNum').textContent=pct+'%';document.getElementById('progressFill').style.width=pct+'%';setToday()}
+                                                                  function setToday(){const d=new Date().getDay();const map={1:['Montag','Schwimmen – kein detaillierter Plan'],2:['Dienstag','Früh: Beine · Abend: Lauftraining'],3:['Mittwoch','Rolle – FTP-Intervalle, maximal 60 Minuten'],4:['Donnerstag','Oberkörper – ca. 45 Minuten'],5:['Freitag','Vereinslauf – kein detaillierter Plan'],6:['Samstag','Rolle + Schwimmen'],0:['Sonntag','Langer Lauf – kein detaillierter Plan']};const t=map[d];document.getElementById('todayTitle').textContent='Heute · '+t[0];document.getElementById('todayText').textContent=t[1]}
+                                                                  function resetWeek(){const w=weeks[window.current||0].n;Object.keys(localStorage).filter(k=>k.startsWith('w'+w+'-')).forEach(k=>localStorage.removeItem(k));render()}
+                                                                  function resetAll(){Object.keys(localStorage).filter(k=>k.startsWith('w')).forEach(k=>localStorage.removeItem(k));render()}
+                                                                  window.current=0;document.getElementById('tabs').innerHTML=weeks.map((w,i)=>`<button class="tab ${i===0?'active':''}" onclick="window.current=${i};render()">Woche ${w.n}</button>`).join('');render();
+                                                                  </script>
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  <meta charset="utf-8">
+                                                                  <meta name="viewport" content="width=device-width, initial-scale=1">
+                                                                  <title>Winter Training</title>
+                                                                  <style>
+                                                                  :root{color-scheme:light dark;--bg:light-dark(#f4f6f7,#101416);--card:light-dark(#fff,#171c1f);--text:light-dark(#172126,#eef2f3);--muted:light-dark(#64727a,#9eabb1);--line:light-dark(#dbe1e4,#303a3f);--accent:light-dark(#087f8c,#52c6d1);--soft:light-dark(#e8f4f5,#19353a);--done:light-dark(#e7f5e9,#18351f)}
+                                                                  *{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}#app{min-height:100vh;background:var(--bg);padding:24px clamp(16px,4vw,48px) 48px}h1,h2,h3{margin:0 0 10px}h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.03em}h2{font-size:24px;margin-top:8px}.sub{color:var(--muted);max-width:800px;line-height:1.5}.top{display:flex;gap:16px;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;margin-bottom:22px}.stats{display:flex;gap:10px;flex-wrap:wrap}.pill{background:var(--soft);padding:9px 12px;border-radius:999px;font-size:13px}.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:10px;margin-bottom:14px}.tab{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:10px;padding:10px 14px;cursor:pointer;white-space:nowrap}.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.04)}.day{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.day h3{font-size:18px}.tag{font-size:11px;padding:5px 8px;border-radius:999px;background:var(--soft);color:var(--accent);white-space:nowrap}.note{color:var(--muted);font-size:13px;line-height:1.45;margin:4px 0 12px}.item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}.item:first-of-type{border-top:0}.item input{width:20px;height:20px;margin-top:1px;accent-color:var(--accent);flex:0 0 auto}.item.done .txt{text-decoration:line-through;opacity:.55}.txt{line-height:1.4}.small{font-size:12px;color:var(--muted)}.section{margin-top:24px}.wide{grid-column:1/-1}.video{display:inline-block;margin-top:7px;font-size:12px;color:var(--accent);text-decoration:none}.video:hover{text-decoration:underline}.week-summary{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}.fill{height:100%;background:var(--accent);width:0}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.btn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:9px;padding:9px 12px;cursor:pointer}.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.warning{background:light-dark(#fff6e3,#3a2d12);border:1px solid light-dark(#f0d49a,#6a5424);padding:13px 15px;border-radius:12px;line-height:1.45;font-size:13px}.footer{margin-top:28px;color:var(--muted);font-size:12px;line-height:1.5}
+                                                                  </style>
+                                                                  
+                                                                  
+                                                                  <div id="app">
+                                                                    <div class="top">
+                                                                        <div><h1>8-Wochen Trainingsplan</h1><div class="sub">Abhakbarer Winterplan mit Schwerpunkt FTP-Entwicklung. FTP-Ausgangswert: <strong>190 W</strong>. Rad nur Mittwoch und Samstag.</div></div>
+                                                                            <div class="stats"><span class="pill">🏊 Mo: Schwimmen</span><span class="pill">🚴 Mi: Rolle ≤60′</span><span class="pill">🚴 Sa: Rolle</span><span class="pill">🏃 So: langer Lauf</span></div>
+                                                                              </div>
+                                                                                <div class="hero"><div class="small">WINTER TRAINING · 8 WOCHEN</div><h2 id="todayTitle">Heute</h2><div class="muted" id="todayText">Deine heutige Einheit wird hier angezeigt.</div><div class="today-grid"><div class="progress-wrap"><div class="progress-num" id="progressNum">0%</div><div class="metric">Wochenfortschritt</div><div class="bar" style="margin-top:9px"><div class="fill" id="progressFill"></div></div></div><div class="progress-wrap"><div class="progress-num">190 W</div><div class="metric">Aktuelle FTP</div><div class="metric" style="margin-top:7px">Rad: Mi + Sa</div></div></div></div>
+                                                                                  <div class="warning">Steuerung: Die Wattwerte sind auf FTP 190 W gerechnet. Wenn eine Einheit ungewöhnlich schwer ist oder die Beine vom Dienstagstraining noch müde sind, Intensität reduzieren. Krafttraining ohne separates Aufwärmprogramm; erste Arbeitssätze trotzdem kontrolliert und nicht bis zum Muskelversagen.</div>
+                                                                                    <div class="section"><div class="tabs" id="tabs"></div><div id="content"></div></div>
+                                                                                      <div class="controls"><button class="btn" onclick="resetWeek()">Aktuelle Woche zurücksetzen</button><button class="btn" onclick="resetAll()">Alle Wochen zurücksetzen</button></div>
+                                                                                        <div class="footer">Video-Links in Woche 1 öffnen YouTube-Videos zur Übungstechnik. Bei Schmerzen oder auffälligen Beschwerden Training abbrechen und fachlich abklären lassen.</div>
+                                                                                        </div>
+                                                                                        <script>
+                                                                                        const weeks=[
+                                                                                        {n:1,rad:["10′ locker 100–130 W","3 × 8′ @ 170–178 W","4′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["60′ gesamt @ 120–140 W","2 × 6′ @ 160–170 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","6 × 2′ zügig (RPE 7/10) / 2′ locker","8–10′ locker auslaufen" ]},
+                                                                                        {n:2,rad:["10′ locker 100–130 W","3 × 10′ @ 170–178 W","4′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["65′ gesamt @ 120–145 W","2 × 8′ @ 160–170 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","5 × 3′ zügig (RPE 7/10) / 2′ locker","8–10′ locker auslaufen"]},
+                                                                                        {n:3,rad:["10′ locker 100–130 W","3 × 12′ @ 170–179 W","4′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["70′ gesamt @ 120–145 W","2 × 10′ @ 160–170 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","4 × 4′ zügig (RPE 7–8/10) / 2′ locker","8–10′ locker auslaufen"]},
+                                                                                        {n:4,rad:["10′ locker","2 × 8′ @ 165–172 W","4′ locker zwischen den Intervallen","10′ locker ausfahren"],sat:["45–60′ locker @ 115–140 W"],run:["35–45′ locker, RPE 3–4/10","Keine Intervalle – Entlastungswoche"]},
+                                                                                        {n:5,rad:["10′ locker 100–130 W","3 × 12′ @ 180–188 W","5′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["70–75′ gesamt @ 120–145 W","2 × 12′ @ 160–172 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","5 × 4′ zügig (RPE 7–8/10) / 2′ locker","8–10′ locker auslaufen"]},
+                                                                                        {n:6,rad:["10′ locker 100–130 W","2 × 15′ @ 182–190 W","6′ locker 100–125 W zwischen den Intervallen","8–10′ locker ausfahren"],sat:["75–80′ gesamt @ 120–145 W","3 × 8′ @ 170–178 W","5′ locker zwischen den Tempoabschnitten"],run:["10′ sehr locker","3 × 8′ zügig-kontrolliert (RPE 7/10) / 3′ locker","8–10′ locker auslaufen"]},
+                                                                                        {n:7,rad:["10′ locker 100–130 W","3 × 15′ @ 182–190 W","5′ locker 100–125 W zwischen den Intervallen","5–8′ locker ausfahren"],sat:["60–75′ überwiegend @ 120–145 W","Optional 2 × 8′ @ 160–170 W, nur wenn frisch","5′ locker dazwischen"],run:["10′ sehr locker","6 × 3′ zügig (RPE 7–8/10) / 2′ locker","8–10′ locker auslaufen"]},
+                                                                                        {n:8,rad:["10′ locker","FTP-Test: 5′ hart, 10′ locker, dann 20′ möglichst gleichmäßig hart","FTP-Schätzung: 20′ Durchschnitt × 0,95","Rest der Stunde locker ausfahren"],sat:["45–60′ sehr locker @ 115–140 W"],run:["30–45′ locker, RPE 3–4/10","Keine harte Laufqualität in der Testwoche"]}
+                                                                                        ];
+                                                                                        const gym={
+                                                                                        legs:[
+                                                                                        ["Kniebeuge / Hack Squat",3,"6–8","2–3′","https://www.youtube.com/watch?v=UFs6E3Ti1jg"],
+                                                                                        ["Rumänisches Kreuzheben",3,"8–10","2′","https://www.youtube.com/watch?v=yac3o7xnA4s"],
+                                                                                        ["Beinpresse",2,"10–12","90″","https://www.youtube.com/results?search_query=leg+press+proper+form"],
+                                                                                        ["Beinbeuger",2,"10–12","75–90″","https://www.youtube.com/results?search_query=leg+curl+proper+form"],
+                                                                                        ["Wadenheben",2,"12–15","60″","https://www.youtube.com/results?search_query=standing+calf+raise+proper+form"],
+                                                                                        ["Plank",2,"40–60 s","45–60″","https://www.youtube.com/results?search_query=plank+proper+form"]],
+                                                                                        upper:[
+                                                                                        ["Bankdrücken / Brustpresse",3,"6–10","2′","https://www.youtube.com/results?search_query=bench+press+proper+form"],
+                                                                                        ["Kabelrudern sitzend",3,"8–12","90″","https://www.youtube.com/watch?v=sP_4vybjVJs"],
+                                                                                        ["Latzug",3,"8–12","90″","https://www.youtube.com/watch?v=MyQVLFBwlJ8"],
+                                                                                        ["Schulterdrücken",2,"8–10","90″","https://www.youtube.com/results?search_query=seated+shoulder+press+proper+form"],
+                                                                                        ["Face Pull / Reverse Fly",2,"12–15","60″","https://www.youtube.com/results?search_query=face+pull+proper+form"],
+                                                                                        ["Trizepsdrücken + Bizepscurls",2,"10–12 je Übung","45–60″","https://www.youtube.com/results?search_query=cable+triceps+pushdown+biceps+curl+proper+form"]]};
+                                                                                        function key(w,d,i){return `w${w}-${d}-${i}`}
+                                                                                        function checked(k){return localStorage.getItem(k)==='1'}
+                                                                                        function set(k,v){v?localStorage.setItem(k,'1'):localStorage.removeItem(k)}
+                                                                                        function toggle(k){set(k,!checked(k));render()}
+                                                                                        function exerciseRows(w,day,arr){return arr.map((x,i)=>`<label class="item ${checked(key(w,day,i))?'done':''}"><input type="checkbox" ${checked(key(w,day,i))?'checked':''} onchange="toggle('${key(w,day,i)}')"><span class="txt">${x}</span></label>`).join('')}
+                                                                                        function gymCard(w,type,title,rows){let html=rows.map((r,i)=>`<label class="item ${checked(key(w,type,i))?'done':''}"><input type="checkbox" ${checked(key(w,type,i))?'checked':''} onchange="toggle('${key(w,type,i)}')"><span class="txt"><strong>${r[0]}</strong><br><span class="small">${r[1]} Sätze × ${r[2]} · Pause ${r[3]}</span><br><a class="video" href="${r[4]}" target="_blank" rel="noopener">▶ Video / Technik ansehen</a></span></label>`).join('');return `<div class="card"><div class="day"><h3>${title}</h3><span class="tag">ca. 45′</span></div><div class="note">RIR 2: Beende die meisten Sätze mit ungefähr 2 sauberen Wiederholungen „im Tank“. Keine extra Aufwärmphase im Plan.</div>${html}</div>`}
+                                                                                        function simpleCard(w,day,title,tag,items){return `<div class="card"><div class="day"><h3>${title}</h3><span class="tag">${tag}</span></div>${exerciseRows(w,day,items)}</div>`}
+                                                                                        function render(){const w=weeks[window.current||0];document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===(window.current||0)));let c=`<div class="week-summary"><span class="pill">Woche ${w.n}</span><span class="pill">FTP 190 W</span><span class="pill">Rad: Mittwoch + Samstag</span></div><div class="grid">`;
+                                                                                        c+=simpleCard(w.n,'mon','Montag · Schwimmen','Abschluss',['Schwimmtraining abgeschlossen']);
+                                                                                        c+=gymCard(w.n,'legs','Dienstag früh · Beine',gym.legs);
+                                                                                        c+=simpleCard(w.n,'run', 'Dienstag Abend · Lauf','Plan',w.run);
+                                                                                        c+=simpleCard(w.n,'wed','Mittwoch früh · Rolle','≤ 60′',w.rad);
+                                                                                        c+=gymCard(w.n,'upper','Donnerstag früh · Oberkörper',gym.upper);
+                                                                                        c+=simpleCard(w.n,'fri','Freitag · Vereinslauf','Abschluss',['Vereinstraining abgeschlossen']);
+                                                                                        c+=simpleCard(w.n,'sat','Samstag · Rolle + Schwimmen','Rad + Abschluss',w.sat.concat(['Schwimmtraining abgeschlossen']));
+                                                                                        c+=simpleCard(w.n,'sun','Sonntag · langer Lauf','Abschluss',['Langer Lauf abgeschlossen']);
+                                                                                        c+='</div>';document.getElementById('content').innerHTML=c;updateProgress()}
+                                                                                        function updateProgress(){const all=[...document.querySelectorAll('input[type=checkbox]')];const done=all.filter(x=>x.checked).length;const pct=all.length?Math.round(done/all.length*100):0;document.querySelector('.stats').title=`${done} von ${all.length} Punkten erledigt`;document.getElementById('progressNum').textContent=pct+'%';document.getElementById('progressFill').style.width=pct+'%';setToday()}
+                                                                                        function setToday(){const d=new Date().getDay();const map={1:['Montag','Schwimmen – kein detaillierter Plan'],2:['Dienstag','Früh: Beine · Abend: Lauftraining'],3:['Mittwoch','Rolle – FTP-Intervalle, maximal 60 Minuten'],4:['Donnerstag','Oberkörper – ca. 45 Minuten'],5:['Freitag','Vereinslauf – kein detaillierter Plan'],6:['Samstag','Rolle + Schwimmen'],0:['Sonntag','Langer Lauf – kein detaillierter Plan']};const t=map[d];document.getElementById('todayTitle').textContent='Heute · '+t[0];document.getElementById('todayText').textContent=t[1]}
+                                                                                        function resetWeek(){const w=weeks[window.current||0].n;Object.keys(localStorage).filter(k=>k.startsWith('w'+w+'-')).forEach(k=>localStorage.removeItem(k));render()}
+                                                                                        function resetAll(){Object.keys(localStorage).filter(k=>k.startsWith('w')).forEach(k=>localStorage.removeItem(k));render()}
+                                                                                        window.current=0;document.getElementById('tabs').innerHTML=weeks.map((w,i)=>`<button class="tab ${i===0?'active':''}" onclick="window.current=${i};render()">Woche ${w.n}</button>`).join('');render();
+                                                                                        </script>
+                                                                                        
+                                                                                        
+                <script>// Write JavaScript here</script>
+            
+        
+    </body>
